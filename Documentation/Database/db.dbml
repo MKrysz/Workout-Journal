@@ -1,0 +1,59 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table data {
+  time_ms integer
+  set_id integer
+  braceletAccX float
+  braceletAccY float
+  braceletAccZ float
+  braceletGyroX float
+  braceletGyroY float
+  braceletGyroZ float
+  phoneAccX float
+  phoneAccY float
+  phoneAccZ float
+  phoneGyroX float
+  phoneGyroY float
+  phoneGyroZ float
+}
+
+Table sets {
+  id integer [primary key]
+  user_id integer
+
+  nr_of_reps integer
+  started_at timestamp
+  has_reps_timestamps bool
+  exercise_id integer
+
+  firmware_version varchar
+  app_version varchar
+}
+
+Table reps {
+  id integer [primary key]
+  set_id integer
+  start_position_ms integer
+}
+
+Table exercises {
+  id integer [primary key]
+  name varchar
+}
+
+Table users {
+  id integer [primary key] //to not oversample one person
+  age integer
+  height integer //do higher people do pullups differently??
+  sex char
+}
+
+Ref: data.set_id > sets.id // many-to-one
+
+Ref: sets.user_id > users.id
+
+Ref: sets.exercise_id > exercises.id
+
+Ref: reps.set_id > sets.id
+
