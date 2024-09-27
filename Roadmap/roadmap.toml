@@ -1,0 +1,70 @@
+[skillmap]
+name = "Workout Roadmap"
+icon = "bicycle"
+progress_bar_style = 23
+
+[groups.us-military-test]
+name = "US Military Tests"
+icon = "rocket"
+
+    [groups.us-military-test.skills.all-time-pullup]
+    name = "Return to all-time best for pullup (14)"
+    progress = "7/14"
+
+    [groups.us-military-test.skills.milestone-pullup-16]
+    name = "Reach milestone 16 pullups"
+    progress = "0/16"
+    requires = ["groups.us-military-test.skills.all-time-pullup"]
+
+    [groups.us-military-test.skills.milestone-pullup-20]
+    name = "Reach milestone 20 pullups"
+    progress = "0/20"
+    requires = ["groups.us-military-test.skills.milestone-pullup-16"]
+
+    [groups.us-military-test.skills.milestone-pullup-23]
+    name = "Reach milestone 23 pullups"
+    progress = "0/23"
+    requires = ["groups.us-military-test.skills.milestone-pullup-20"]
+
+
+    [groups.us-military-test.skills.milestone-pushup-37]
+    name = "Reach milestone 37 pushups"
+    progress = "0/37"
+    requires = ["groups.us-military-test.skills.all-time-pullup"]
+
+    [groups.us-military-test.skills.milestone-pushup-47]
+    name = "Reach milestone 47 pushups"
+    progress = "0/47"
+    requires = ["groups.us-military-test.skills.milestone-pushup-37"]
+
+    [groups.us-military-test.skills.milestone-pushup-71]
+    name = "Reach milestone 71 pushups"
+    progress = "0/71"
+    requires = ["groups.us-military-test.skills.milestone-pushup-47"]
+
+    [groups.us-military-test.skills.milestone-pushup-81]
+    name = "Reach milestone 81 pushups"
+    progress = "0/81"
+    requires = ["groups.us-military-test.skills.milestone-pushup-71"]
+
+    [groups.us-military-test.skills.milestone-pushup-87]
+    name = "Reach milestone 87 pushups"
+    progress = "0/87"
+    requires = ["groups.us-military-test.skills.milestone-pushup-81"]
+
+
+    [groups.us-military-test.skills.all-time-plank]
+    name = "Return to all-time best for plank (2:40)"
+    progress = "9/16"
+    requires = ["groups.us-military-test.skills.all-time-pullup"]
+
+    [groups.us-military-test.skills.milestone-pullup-310]
+    name = "Reach milestone 3:10 plank"
+    progress = "0/19"
+    requires = ["groups.us-military-test.skills.all-time-plank"]
+
+    [groups.us-military-test.skills.milestone-pullup-320]
+    name = "Reach milestone 3:20 plank"
+    progress = "0/20"
+    requires = ["groups.us-military-test.skills.milestone-pullup-310"]
+
