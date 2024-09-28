@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Workout Journal</title>
+</head>
+<body>
+    {% if weight is not none %}
+    <h4>Added {{ weight }}kg to database</h4>
+    {% endif %}
+    <h1>Add Weight</h1>
+
+    <!-- Start of the form element -->
+    <form action = "http://127.0.0.1:5000/add-weight" method = "get">
+        <!-- various form controls -->
+        <label for="weight">Current Weight:</label>
+        <input type = "real" name = "weight" required/>
+        <br><br>
+        <input type = "submit">
+     </form>
+
+</body>
+</html>

@@ -1,5 +1,10 @@
 #
 
+## Web-App
+
+cd Web-App
+flask --app journal run --reload
+
 ## Roadmap
 
 ### Dependencies
