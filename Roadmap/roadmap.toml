@@ -55,7 +55,7 @@ icon = "rocket"
 
     [groups.us-military-test.skills.all-time-plank]
     name = "Return to all-time best for plank (2:40)"
-    progress = "9/16"
+    progress = "0/16"
     requires = ["groups.us-military-test.skills.all-time-pullup"]
 
     [groups.us-military-test.skills.milestone-pullup-310]
@@ -68,3 +68,75 @@ icon = "rocket"
     progress = "0/20"
     requires = ["groups.us-military-test.skills.milestone-pullup-310"]
 
+
+    [groups.us-military-test.skills.outstanding-high]
+    name = "Score: Outstanding High"
+    progress = "0/3"
+    requires = ["groups.us-military-test.skills.milestone-pullup-320", 
+                "groups.us-military-test.skills.milestone-pushup-87", 
+                "groups.us-military-test.skills.milestone-pullup-23"]
+
+
+
+[groups.rnd]
+name = "R&D"
+icon = "rocket"
+
+    [groups.rnd.skills.l-leg-r-start]
+    name = "Do 3 sessions of 5 sets of lying leg raises exercise"
+    progress = "3/3"
+
+    [groups.rnd.skills.l-leg-r-beginner]
+    name = "Do 3 sessions of 5 sets of 8+ reps lying leg raises exercise"
+    progress = "0/8"
+    requires = ["groups.rnd.skills.l-leg-r-start"]
+
+    [groups.rnd.skills.l-leg-r-intermediate]
+    name = "Do 3 sessions of 5 sets of 10+ reps lying leg raises exercise"
+    progress = "0/10"
+    requires = ["groups.rnd.skills.l-leg-r-beginner"]
+
+    [groups.rnd.skills.l-leg-r-advanced]
+    name = "Do 3 sessions of 5 sets of 12+ reps lying leg raises exercise"
+    progress = "0/12"
+    requires = ["groups.rnd.skills.l-leg-r-intermediate"]
+
+    [groups.rnd.skills.knee-r-start]
+    name = "Do 3 sessions of 5 sets of knee raises exercise"
+    progress = "0/3"
+    requires = ["groups.rnd.skills.l-leg-r-advanced"]
+
+    [groups.rnd.skills.knee-r-beginner]
+    name = "Do 3 sessions of 5 sets of 8+ reps knee raises exercise"
+    progress = "0/8"
+    requires = ["groups.rnd.skills.knee-r-start"]
+
+    [groups.rnd.skills.knee-r-intermediate]
+    name = "Do 3 sessions of 5 sets of 10+ reps knee raises exercise"
+    progress = "0/10"
+    requires = ["groups.rnd.skills.knee-r-beginner"]
+
+    [groups.rnd.skills.knee-r-advanced]
+    name = "Do 3 sessions of 5 sets of 12+ reps knee raises exercise"
+    progress = "0/12"
+    requires = ["groups.rnd.skills.knee-r-intermediate"]
+
+    [groups.rnd.skills.leg-r-start]
+    name = "Do 3 sessions of 5 sets of leg raises exercise"
+    progress = "0/3"
+    requires = ["groups.rnd.skills.knee-r-advanced"]
+
+    [groups.rnd.skills.leg-r-beginner]
+    name = "Do 3 sessions of 5 sets of 8+ reps leg raises exercise"
+    progress = "0/8"
+    requires = ["groups.rnd.skills.leg-r-start"]
+
+    [groups.rnd.skills.leg-r-intermediate]
+    name = "Do 3 sessions of 5 sets of 10+ reps leg raises exercise"
+    progress = "0/10"
+    requires = ["groups.rnd.skills.leg-r-beginner"]
+
+    [groups.rnd.skills.leg-r-advanced]
+    name = "Do 3 sessions of 5 sets of 12+ reps leg raises exercise"
+    progress = "0/12"
+    requires = ["groups.rnd.skills.leg-r-intermediate"]
