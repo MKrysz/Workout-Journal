@@ -2,8 +2,7 @@
 
 ## Web-App
 
-cd Web-App
-flask --app journal run --reload
+flask --app Web-App.journal run --reload
 
 ## Roadmap
 

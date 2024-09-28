@@ -6,9 +6,10 @@ import os
 from datetime import datetime
 
 
+
 class Database:
     def __init__(self):
-        self.db_name = "database.db"
+        self.db_name = "Database/database.db"
         first_run = False
         if(not os.path.isfile(self.db_name)):
             print("Could not find database")
@@ -43,7 +44,7 @@ class Database:
 
         self.cursor.execute(insertQuery, (name, weigh, shortName, timestamp))
 
-    def weight_insert(self, weigh, timestamp):
+    def weight_insert(self, weight, timestamp):
 
         if(isinstance(timestamp, str)):
             timestamp = datetime.strptime(timestamp, "%d/%m/%y")
@@ -52,8 +53,7 @@ class Database:
             INSERT INTO Weight (WEIGHT, TIMESTAMP)
             VALUES (?, ?)
         """
-
-        self.cursor.execute(insertQuery, (weigh, timestamp))
+        self.cursor.execute(insertQuery, (weight, timestamp))
 
     def parse_weight_calc_function(self, function):
         result = ""
@@ -277,6 +277,11 @@ class Database:
         self.weight_insert(73.1, "19/05/24")
         self.weight_insert(72.7, "26/05/24")
         self.weight_insert(71.6, "02/06/24")
+        self.weight_insert(72.1, "10/09/24")
+        self.weight_insert(72.1, "11/09/24")
+        self.weight_insert(72.1, "13/09/24")
+        self.weight_insert(72.2, "14/09/24")
+        self.weight_insert(72.2, "28/09/24")
 
         self.exercise_insert("pullup",                   weightCalcMethod="uw + aw")
         self.exercise_insert("pushup",                   weightCalcMethod="0.7*uw+0.9*aw",  comments="Volume calculation measured empirically")

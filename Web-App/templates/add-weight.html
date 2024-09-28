@@ -2,21 +2,41 @@
 <html>
 <head>
    <title>Workout Journal</title>
+
+    <style>
+        a:link, a:visited {
+        background-color: #f44336;
+        color: white;
+        padding: 14px 25px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        }
+        
+        a:hover, a:active {
+        background-color: red;
+        }
+    </style>
+
 </head>
 <body>
     {% if weight is not none %}
-    <h4>Added {{ weight }}kg to database</h4>
+    <p>Added {{ weight }}kg to database</p>
     {% endif %}
     <h1>Add Weight</h1>
 
     <!-- Start of the form element -->
-    <form action = "http://127.0.0.1:5000/add-weight" method = "get">
+    <form action = "add-weight" method = "get">
         <!-- various form controls -->
         <label for="weight">Current Weight:</label>
-        <input type = "real" name = "weight" required/>
+        <input type = "text" name = "weight" required/>
         <br><br>
-        <input type = "submit">
+        <input type = "submit", name="Submit">
      </form>
+
+     <br><br>
+     
+    <a href="/" target="_self">Home Page</a>
 
 </body>
 </html>
