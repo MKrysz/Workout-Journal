@@ -297,7 +297,7 @@ class Database:
 
 
         self.workout_insert(timestamp="6/5/24", comment="Testing new barbells for home gym", type="Strenght")
-        self.set_insert(exercise_name="standing bicep curl both", workout_id=1, nr_of_reps=12, addWeight=12.0)
+        self.set_insert(exercise_name="bicep curl both", workout_id=1, nr_of_reps=12, addWeight=12.0)
 
         self.workout_insert(timestamp="10/5/24", comment="Testing new pullup bar in home gym", type="Strenght")
         self.set_insert(exercise_name="pullup", workout_id=2, nr_of_reps=5, addWeight=0.0)
@@ -520,6 +520,23 @@ class Database:
         self.set_insert(exercise_name="plank",    workout_id=wid, nr_of_reps=60, addWeight=0.0 )
         self.set_insert(exercise_name="plank",    workout_id=wid, nr_of_reps=60, addWeight=0.0 )
         self.set_insert(exercise_name="plank",    workout_id=wid, nr_of_reps=50, addWeight=0.0 )
+
+        self.workout_insert(timestamp="24/6/24 16:00", duration="1:40",type="Strenght", comment="Training with Jas")
+        wid = 17
+        for i in range(5):
+            self.set_insert(exercise_name="pullup",   workout_id=wid, nr_of_reps=7,  addWeight=0.0 )
+            self.set_insert(exercise_name="pushup",   workout_id=wid, nr_of_reps=12, addWeight=0.0 )
+            self.set_insert(exercise_name="l leg r",  workout_id=wid, nr_of_reps=7,  addWeight=0.0 )
+            self.set_insert(exercise_name="ez curl",  workout_id=wid, nr_of_reps=9,  addWeight=20.0)
+            self.set_insert(exercise_name="dip",      workout_id=wid, nr_of_reps=5,  addWeight=0.0 )
+            self.set_insert(exercise_name="inv row",  workout_id=wid, nr_of_reps=7,  addWeight=0.0 )
+        for i in range(4):
+            self.set_insert(exercise_name="plank",    workout_id=wid, nr_of_reps=60, addWeight=0.0 )
+            self.set_insert(exercise_name="step up",  workout_id=wid, nr_of_reps=12, addWeight=9.0 )
+            self.set_insert(exercise_name="dip",      workout_id=wid, nr_of_reps=5,  addWeight=0.0 )
+            self.set_insert(exercise_name="squat",    workout_id=wid, nr_of_reps=12,  addWeight=0.0 )
+        for i in range(3):
+            self.set_insert(exercise_name="calf r",   workout_id=wid, nr_of_reps=12, addWeight=18.0)
 
 
         print("Database initialized!")
