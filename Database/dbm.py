@@ -3,8 +3,10 @@
 import sqlite3
 import argparse
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
+def Timedelta2Minutes(duration):
+    return int(duration.total_seconds()/60)
 
 
 class Database:
@@ -86,6 +88,10 @@ class Database:
         if(isinstance(duration, str)):
             duration = datetime.strptime(duration, "%H:%M")
             duration = duration.minute + 60*duration.hour
+        
+        if(isinstance(duration, timedelta)):
+            print("works")
+            duration = Timedelta2Minutes(duration)
 
         insertQuery = """
             INSERT INTO Workouts (TIMESTAMP, DURATION_MINUTES, COMMENT, TYPE)
@@ -109,7 +115,7 @@ class Database:
             return result[0][0]
         elif(len(result) >= 1):
             print(result)
-            raise("exercise name is not unique?")
+            raise ValueError("exercise name is not unique?")
 
 
         self.cursor.execute(querySName, [name])
@@ -120,10 +126,10 @@ class Database:
             return result[0][0]
         elif(len(result) >= 1):
             print(result)
-            raise("exercise name is not unique?")
+            raise ValueError("exercise name is not unique?")
 
         
-        raise("exercise name not found")
+        raise ValueError("exercise name not found")
 
     def get_workout(self, workout_id):
         query = """
@@ -140,6 +146,14 @@ class Database:
         self.cursor.execute(query, [exercise_id])
         result = self.cursor.fetchall()
         return result[0]
+
+    def get_latest_wid(self):
+        query = """
+            SELECT MAX(id) FROM Workouts
+        """
+        self.cursor.execute(query)
+        result = self.cursor.fetchall()
+        return result[0][0]
 
 
     def load_variables(self, timestamp):
@@ -190,13 +204,13 @@ class Database:
         if(exercise_id is None):
             exercise_id = self.get_exercise_id(exercise_name)
 
-        volume = self.calculate_volume(exercise_id, workout_id, nr_of_reps, addWeight)
+        # TODO: add volume calculation after whole workout is finished
 
         insertQuery = """
-            INSERT INTO Sets (exercise_id, workout_id, nr_of_reps, addWeight, volume)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO Sets (exercise_id, workout_id, nr_of_reps, addWeight)
+            VALUES (?, ?, ?, ?)
         """
-        self.cursor.execute(insertQuery, (exercise_id, workout_id, nr_of_reps, addWeight, volume))
+        self.cursor.execute(insertQuery, (exercise_id, workout_id, nr_of_reps, addWeight))
 
 
     def create(self):
@@ -282,6 +296,7 @@ class Database:
         self.weight_insert(72.1, "13/09/24")
         self.weight_insert(72.2, "14/09/24")
         self.weight_insert(72.2, "28/09/24")
+        self.weight_insert(72.6, "29/09/24")
 
         self.exercise_insert("pullup",                   weightCalcMethod="uw + aw")
         self.exercise_insert("pushup",                   weightCalcMethod="0.7*uw+0.9*aw",  comments="Volume calculation measured empirically")
