@@ -1,0 +1,3 @@
+#!/usr/bin/sh
+
+flask --app Web-App.journal run --reload
