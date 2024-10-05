@@ -66,7 +66,7 @@ def test__weight_read_all(client):
     for i in range(20):
         w1 = schemas.WeightCreate(weight = startW+i, timestamp=date(2024, 10, i+1))
         response = client.post("/weight", json=jsonable_encoder(w1))
-        assert response.status_code == 200
+        assert response.status_code == 200 # make sure weight_write worked
     response = client.get("/weight", params = {"limit":20})
     assert response.status_code == 200
     results = response.json()
@@ -84,7 +84,7 @@ def test__weight_read_by_id(client):
     for i in range(20):
         w1 = schemas.WeightCreate(weight = startW+i, timestamp=date(2024, 10, i+1))
         response = client.post("/weight", json=jsonable_encoder(w1))
-        assert response.status_code == 200
+        assert response.status_code == 200 # make sure weight_write worked
     response = client.get(f"/weight/{weight_id}")
     assert response.status_code == 200
     result = schemas.Weight.parse_obj(response.json())
@@ -92,3 +92,33 @@ def test__weight_read_by_id(client):
     assert result.timestamp == date(2024, 10, 2)
     assert result.id == weight_id
 
+def test__weight_read_by_date_single(client):
+    startW = 20
+    for i in range(20):
+        w1 = schemas.WeightCreate(weight = startW+i, timestamp=date(2024, 10, i+1))
+        response = client.post("/weight", json=jsonable_encoder(w1))
+        assert response.status_code == 200 # make sure weight_write worked
+    response = client.get(f"/weight/range/?start=2024-10-3")
+    assert response.status_code == 200
+    result = schemas.Weight.parse_obj(response.json()[0])
+    assert result.weight == 22
+    assert result.timestamp == date(2024, 10, 3)
+    assert result.id == 3
+
+def test__weight_read_by_date_multiple(client):
+    startW = 20
+    for i in range(20):
+        w1 = schemas.WeightCreate(weight = startW+i, timestamp=date(2024, 10, i+1))
+        response = client.post("/weight", json=jsonable_encoder(w1))
+        assert response.status_code == 200 # make sure weight_write worked
+    response = client.get(f"/weight/range/?start=2024-10-2&end=2024-10-7")
+    assert response.status_code == 200
+    results = response.json()
+    assert len(results) == 6
+    results = [schemas.Weight.parse_obj(x) for x in results]
+    i = 1
+    for result in results:
+        assert result.id == i+1
+        assert result.weight == startW+i
+        assert result.timestamp == date(2024, 10, i+1)
+        i +=1

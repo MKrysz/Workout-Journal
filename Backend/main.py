@@ -50,3 +50,10 @@ def read_weight(weight_id: int, db: Session = Depends(get_db)):
     if (db_weight is None):
         raise HTTPException(status_code=404, detail="Weight not found")
     return db_weight
+
+@app.get("/weight/range/", response_model=list[schemas.Weight])
+def read_weight_by_range(start: date, end: date|None = None, db: Session = Depends(get_db)):
+    result = crud.get_weight_by_daterange(db, start, end)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Weights not found")
+    return result

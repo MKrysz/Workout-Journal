@@ -44,7 +44,7 @@ class Set(Base):
     exercise = relationship("Exercise", back_populates="sets")
     workout = relationship("Workout", back_populates="sets")
 
-class EquipementWeights(Base):
+class EquipementWeight(Base):
     __tablename__ = "equipement_weights"
     id = Column(Integer, primary_key=True)
 
