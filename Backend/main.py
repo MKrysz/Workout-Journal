@@ -32,19 +32,19 @@ def get_db():
     finally:
         db.close()
 
-@app.post("/weights/", response_model=schemas.Weight)
+@app.post("/weight/", response_model=schemas.Weight)
 def create_weight(weight: schemas.WeightCreate, db: Session = Depends(get_db)):
     db_weight = crud.create_weight(db, weight=weight)
     if(db_weight == "Date-already-exists"):
         raise HTTPException(status_code=400, detail="This date's weight log already exists")
     return db_weight
 
-@app.get("/weights/", response_model=list[schemas.Weight])
+@app.get("/weight/", response_model=list[schemas.Weight])
 def read_weights(skip: int = 0,limit: int = 100, db: Session = Depends(get_db)):
     weights = crud.get_weights(db, skip=skip, limit=limit)
     return weights
 
-@app.get("/weights/{weight_id}", response_model=schemas.Weight)
+@app.get("/weight/{weight_id}", response_model=schemas.Weight)
 def read_weight(weight_id: int, db: Session = Depends(get_db)):
     db_weight = crud.get_weight(db, weight_id=weight_id)
     if (db_weight is None):
