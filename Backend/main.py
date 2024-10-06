@@ -32,12 +32,18 @@ def get_db():
     finally:
         db.close()
 
+# WEIGHT
+
+# WEIGHT - CREATE
+
 @app.post("/weight/", response_model=schemas.Weight)
 def create_weight(weight: schemas.WeightCreate, db: Session = Depends(get_db)):
     db_weight = crud.create_weight(db, weight=weight)
     if(db_weight == "Date-already-exists"):
         raise HTTPException(status_code=400, detail="This date's weight log already exists")
     return db_weight
+
+# WEIGHT - READ
 
 @app.get("/weight/", response_model=list[schemas.Weight])
 def read_weights(skip: int = 0,limit: int = 100, db: Session = Depends(get_db)):
@@ -55,10 +61,34 @@ def read_weight(weight_id: int, db: Session = Depends(get_db)):
 def read_weight_by_range(start: date, end: date|None = None, db: Session = Depends(get_db)):
     result = crud.get_weight_by_daterange(db, start, end)
     if result is None:
-        raise HTTPException(status_code=404, detail="Weights not found")
+        raise HTTPException(status_code=404, detail="Weight not found")
     return result
 
+
+# WORKOUT - CREATE
+
 @app.post("/workout/", response_model=schemas.Workout)
-def create_weight(workout: schemas.WorkoutCreate, db: Session = Depends(get_db)):
+def create_workout(workout: schemas.WorkoutCreate, db: Session = Depends(get_db)):
     db_workout = crud.create_workout(db, workout=workout)
     return db_workout
+
+# WORKOUT - READ
+
+@app.get("/workout/", response_model=list[schemas.Workout])
+def read_workouts(skip: int = 0,limit: int = 100, db: Session = Depends(get_db)):
+    workouts = crud.get_workouts(db, skip=skip, limit=limit)
+    return workouts
+
+@app.get("/workout/{workout_id}", response_model=schemas.Workout)
+def read_workout(workout_id: int, db: Session = Depends(get_db)):
+    db_workout = crud.get_workout(db, workout_id=workout_id)
+    if (db_workout is None):
+        raise HTTPException(status_code=404, detail="Workout not found")
+    return db_workout
+
+@app.get("/workout/range/", response_model=list[schemas.Workout])
+def read_workout_by_range(start: date, end: date|None = None, db: Session = Depends(get_db)):
+    result = crud.get_workout_by_daterange(db, start, end)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Workout not found")
+    return result

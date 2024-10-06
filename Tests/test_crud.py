@@ -256,3 +256,90 @@ def test__workout_write_rating_not_provided(client):
     assert result.rating is None
 
 ## Read
+
+def test__workout_read_return_200(client):
+    response = client.get("/workout")
+    assert response.status_code == 200
+
+def test__workout_read_by_range_only_start_return_200(client):
+    response = client.get("/workout/?start=2020-07-17")
+    assert response.status_code == 200
+
+def test__workout_read_by_range_start_end_return_200(client):
+    response = client.get("/workout/?start=2020-07-17&end=2034-01-09")
+    assert response.status_code == 200
+
+def test__workout_read_all(client):
+    startW = 20
+    ws = []
+    for i in range(20):
+        w1 = schemas.WorkoutCreate(
+            timestamp=datetime(2024, 10, i+1, 16, 5+i),
+            workout_type = "Strength",
+            comment="Feeling great",
+            duration_in_minutes = 115+i,
+            rating=4
+        )
+        response = client.post("/workout", json=jsonable_encoder(w1))
+        assert response.status_code == 200
+        ws.append(w1)
+    response = client.get("/workout", params = {"limit":20})
+    assert response.status_code == 200
+    results = response.json()
+    assert len(results) == 20
+    results = [schemas.Workout.model_validate(x) for x in results]
+    for i in range(20):
+        result = results[i]
+        w = ws[i]
+        assert result.id == i+1
+        assert result.workout_type == w.workout_type
+        assert result.comment == w.comment
+        assert result.duration_in_minutes == w.duration_in_minutes
+        assert result.timestamp == w.timestamp
+        assert result.rating == w.rating
+
+# TODO: write actual response tests
+# def test__workout_read_by_id(client):
+#     workout_id = 2
+#     startW = 20
+#     for i in range(20):
+#         w1 = schemas.WeightCreate(weight = startW+i, timestamp=date(2024, 10, i+1))
+#         response = client.post("/weight", json=jsonable_encoder(w1))
+#         assert response.status_code == 200 # make sure weight_write worked
+#     response = client.get(f"/weight/{weight_id}")
+#     assert response.status_code == 200
+#     result = schemas.Weight.model_validate(response.json())
+#     assert result.weight == 21
+#     assert result.timestamp == date(2024, 10, 2)
+#     assert result.id == weight_id
+
+# def test__weight_read_by_date_single(client):
+#     startW = 20
+#     for i in range(20):
+#         w1 = schemas.WeightCreate(weight = startW+i, timestamp=date(2024, 10, i+1))
+#         response = client.post("/weight", json=jsonable_encoder(w1))
+#         assert response.status_code == 200 # make sure weight_write worked
+#     response = client.get(f"/weight/range/?start=2024-10-03")
+#     assert response.status_code == 200
+#     result = schemas.Weight.model_validate(response.json()[0])
+#     assert result.weight == 22
+#     assert result.timestamp == date(2024, 10, 3)
+#     assert result.id == 3
+
+# def test__weight_read_by_date_multiple(client):
+#     startW = 20
+#     for i in range(20):
+#         w1 = schemas.WeightCreate(weight = startW+i, timestamp=date(2024, 10, i+1))
+#         response = client.post("/weight", json=jsonable_encoder(w1))
+#         assert response.status_code == 200 # make sure weight_write worked
+#     response = client.get(f"/weight/range/?start=2024-10-02&end=2024-10-07")
+#     assert response.status_code == 200
+#     results = response.json()
+#     assert len(results) == 6
+#     results = [schemas.Weight.model_validate(x) for x in results]
+#     i = 1
+#     for result in results:
+#         assert result.id == i+1
+#         assert result.weight == startW+i
+#         assert result.timestamp == date(2024, 10, i+1)
+#        i +=1

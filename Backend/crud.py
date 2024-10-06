@@ -59,9 +59,9 @@ def create_workout(db: Session, workout: schemas.WorkoutCreate):
     db_workout = models.Workout(
         timestamp           = workout.timestamp,
         duration_in_minutes = workout.duration_in_minutes,
-        workout_type = workout.workout_type,
-        comment = workout.comment,
-        rating = workout.rating
+        workout_type        = workout.workout_type,
+        comment             = workout.comment,
+        rating              = workout.rating
     )
     db.add(db_workout)
     db.commit()
@@ -69,6 +69,22 @@ def create_workout(db: Session, workout: schemas.WorkoutCreate):
     return db_workout
 
 ## Read
+
+def get_workout(db: Session, workout_id: int):
+    return db.query(models.Workout).filter(models.Workout.id == workout_id).first()
+
+def get_workouts(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Workout).offset(skip).limit(limit).all()
+
+def get_workout_by_daterange(db: Session, start: date, end: date|None = None):
+    if end is None:
+        end = start
+    return db.query(models.Workout).filter(
+        and_(
+            (start <= models.Workout.timestamp),
+            (models.Workout.timestamp <= end)
+        )).all()
+
 
 ## Update
 
