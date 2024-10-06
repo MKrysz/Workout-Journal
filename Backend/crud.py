@@ -75,7 +75,7 @@ def get_weight_by_daterange(db: Session, start: date, end: date|None = None):
 ## Delete
 
 
-# EquipementWeight
+# EquipmentWeight
 
 ## Create
 

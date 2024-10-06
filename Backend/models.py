@@ -15,9 +15,10 @@ class Workout(Base):
     id = Column(Integer, primary_key=True)
 
     timestamp = Column(DateTime)
-    duration = Column(Integer)
-    wtype = Column(String)
+    duration_in_minutes = Column(Integer)
+    workout_type = Column(String)
     comment = Column(String)
+    rating = Column(Integer)
 
     sets = relationship("Set", back_populates="workout")
 
@@ -39,16 +40,16 @@ class Set(Base):
     exercise_id = Column(Integer, ForeignKey("exercises.id"))
     workout_id = Column(Integer, ForeignKey("workouts.id"))
     reps = Column(Integer)
-    add_weight = Column(Float)
+    additional_weight = Column(Float)
 
     exercise = relationship("Exercise", back_populates="sets")
     workout = relationship("Workout", back_populates="sets")
 
-class EquipementWeight(Base):
-    __tablename__ = "equipement_weights"
+class EquipmentWeight(Base):
+    __tablename__ = "equipment_weights"
     id = Column(Integer, primary_key=True)
 
-    timestamp = Column(DateTime)
+    timestamp = Column(Date)
     weight = Column(Float)
     name = Column(String)
     short_name = Column(String)
