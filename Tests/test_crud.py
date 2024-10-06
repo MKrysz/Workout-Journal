@@ -38,6 +38,8 @@ def fixture_client():
     with TestClient(app) as client:
         yield client
 
+# connectivity tests
+
 def test__weight_write_return_200(client):
     w1 = schemas.WeightCreate(weight = 70, timestamp=date(2024, 10, 2))
     response = client.post("/weight", json=jsonable_encoder(w1))
@@ -51,6 +53,17 @@ def test__weight_write_check_database_reset(client):
 def test__weight_read_return_200(client):
     response = client.get("/weight")
     assert response.status_code == 200
+
+def test__weight_read_by_range_return_200(client):
+    response = client.get("/weight/?start=2020-07-17")
+    assert response.status_code == 200
+
+    response = client.get("/weight/?start=2020-07-17&end=2034-01-09")
+    assert response.status_code == 200
+
+# Weight
+
+## Create
 
 def test__weight_write(client):
     w1 = schemas.WeightCreate(weight = 70, timestamp=date(2024, 10, 2))
@@ -69,6 +82,8 @@ def test__weight_write_same_date(client):
     w1 = schemas.WeightCreate(weight = 71, timestamp=date(2024, 10, 2))
     response = client.post("/weight", json=jsonable_encoder(w1))
     assert response.status_code == 400 # timestamp must be unique
+
+## Read
 
 def test__weight_read_all(client):
     startW = 20
