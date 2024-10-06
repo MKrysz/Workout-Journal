@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime, date
 
 
@@ -12,24 +12,22 @@ class WeightCreate(WeightBase):
 class Weight(WeightBase):
     id: int
     timestamp: date
-
-    class Config:
-        orm_mode = True
+    ConfigDict(from_attributes=True)
 
 
-class WorkoutBase(BaseModel):
-    timestamp: datetime
-    wtype: str | None = None
-    comment: str | None = None
+# class WorkoutBase(BaseModel):
+#     timestamp: datetime
+#     wtype: str | None = None
+#     comment: str | None = None
 
-class WorkoutCreate(WorkoutBase):
-    duration: int | None = None
-    end_time: datetime | None = None
+# class WorkoutCreate(WorkoutBase):
+#     duration: int | None = None
+#     end_time: datetime | None = None
 
 
-class Workout(WorkoutBase):
-    id: int
-    duration: int
+# class Workout(WorkoutBase):
+#     id: int
+#     duration: int
 
-    class Config:
-        orm_mode = True
+#     class Config:
+#         orm_mode = True

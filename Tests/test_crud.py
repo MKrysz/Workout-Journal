@@ -56,10 +56,19 @@ def test__weight_write(client):
     w1 = schemas.WeightCreate(weight = 70, timestamp=date(2024, 10, 2))
     response = client.post("/weight", json=jsonable_encoder(w1))
     assert response.status_code == 200
-    result = schemas.Weight.parse_obj(response.json())
+    result = schemas.Weight.model_validate(response.json())
     assert result.weight == w1.weight
     assert result.timestamp == w1.timestamp
     assert result.id == 1
+
+
+def test__weight_write_same_date(client):
+    w1 = schemas.WeightCreate(weight = 70, timestamp=date(2024, 10, 2))
+    response = client.post("/weight", json=jsonable_encoder(w1))
+    assert response.status_code == 200
+    w1 = schemas.WeightCreate(weight = 71, timestamp=date(2024, 10, 2))
+    response = client.post("/weight", json=jsonable_encoder(w1))
+    assert response.status_code == 400 # timestamp must be unique
 
 def test__weight_read_all(client):
     startW = 20
@@ -71,7 +80,7 @@ def test__weight_read_all(client):
     assert response.status_code == 200
     results = response.json()
     assert len(results) == 20
-    results = [schemas.Weight.parse_obj(x) for x in results]
+    results = [schemas.Weight.model_validate(x) for x in results]
     for i in range(20):
         result = results[i]
         assert result.weight == startW+i
@@ -87,7 +96,7 @@ def test__weight_read_by_id(client):
         assert response.status_code == 200 # make sure weight_write worked
     response = client.get(f"/weight/{weight_id}")
     assert response.status_code == 200
-    result = schemas.Weight.parse_obj(response.json())
+    result = schemas.Weight.model_validate(response.json())
     assert result.weight == 21
     assert result.timestamp == date(2024, 10, 2)
     assert result.id == weight_id
@@ -98,9 +107,9 @@ def test__weight_read_by_date_single(client):
         w1 = schemas.WeightCreate(weight = startW+i, timestamp=date(2024, 10, i+1))
         response = client.post("/weight", json=jsonable_encoder(w1))
         assert response.status_code == 200 # make sure weight_write worked
-    response = client.get(f"/weight/range/?start=2024-10-3")
+    response = client.get(f"/weight/range/?start=2024-10-03")
     assert response.status_code == 200
-    result = schemas.Weight.parse_obj(response.json()[0])
+    result = schemas.Weight.model_validate(response.json()[0])
     assert result.weight == 22
     assert result.timestamp == date(2024, 10, 3)
     assert result.id == 3
@@ -111,11 +120,11 @@ def test__weight_read_by_date_multiple(client):
         w1 = schemas.WeightCreate(weight = startW+i, timestamp=date(2024, 10, i+1))
         response = client.post("/weight", json=jsonable_encoder(w1))
         assert response.status_code == 200 # make sure weight_write worked
-    response = client.get(f"/weight/range/?start=2024-10-2&end=2024-10-7")
+    response = client.get(f"/weight/range/?start=2024-10-02&end=2024-10-07")
     assert response.status_code == 200
     results = response.json()
     assert len(results) == 6
-    results = [schemas.Weight.parse_obj(x) for x in results]
+    results = [schemas.Weight.model_validate(x) for x in results]
     i = 1
     for result in results:
         assert result.id == i+1
