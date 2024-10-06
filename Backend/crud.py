@@ -4,6 +4,9 @@ from datetime import datetime, date
 
 from . import models, schemas
 
+# Utility functions
+def Timedelta2Minutes(duration):
+    return int(duration.total_seconds()/60)
 
 # WEIGHT
 
@@ -45,6 +48,25 @@ def get_weight_by_daterange(db: Session, start: date, end: date|None = None):
 # Workout
 
 ## Create
+
+def create_workout(db: Session, workout: schemas.WorkoutCreate):
+    if (workout.duration_in_minutes is None):
+        if (workout.end_time is None):
+            workout.end_time = datetime.now()
+        workout.duration_in_minutes = Timedelta2Minutes(workout.end_time - workout.timestamp)
+    if (workout.comment is None):
+        workout.comment = ""
+    db_workout = models.Workout(
+        timestamp           = workout.timestamp,
+        duration_in_minutes = workout.duration_in_minutes,
+        workout_type = workout.workout_type,
+        comment = workout.comment,
+        rating = workout.rating
+    )
+    db.add(db_workout)
+    db.commit()
+    db.refresh(db_workout)
+    return db_workout
 
 ## Read
 

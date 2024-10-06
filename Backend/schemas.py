@@ -24,6 +24,7 @@ class WorkoutBase(BaseModel):
     rating: int | None = None
 
 class WorkoutCreate(WorkoutBase):
+    duration_in_minutes: int | None = None
     end_time: datetime | None = None
     comment: str | None = None
 

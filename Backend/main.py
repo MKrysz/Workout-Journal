@@ -57,3 +57,8 @@ def read_weight_by_range(start: date, end: date|None = None, db: Session = Depen
     if result is None:
         raise HTTPException(status_code=404, detail="Weights not found")
     return result
+
+@app.post("/workout/", response_model=schemas.Workout)
+def create_weight(workout: schemas.WorkoutCreate, db: Session = Depends(get_db)):
+    db_workout = crud.create_workout(db, workout=workout)
+    return db_workout
