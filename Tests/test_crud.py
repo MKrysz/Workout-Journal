@@ -40,9 +40,9 @@ def fixture_client():
 
 
 
-# Weight
+#region Weight
 
-## Create
+# Create
 
 def test__weight_write_return_200(client):
     w1 = schemas.WeightCreate(weight = 70, timestamp=date(2024, 10, 2))
@@ -72,7 +72,7 @@ def test__weight_write_same_date(client):
     response = client.post("/weight", json=jsonable_encoder(w1))
     assert response.status_code == 400 # timestamp must be unique
 
-## Read
+# Read
 
 def test__weight_read_return_200(client):
     response = client.get("/weight")
@@ -149,10 +149,16 @@ def test__weight_read_by_date_multiple(client):
         assert result.timestamp == date(2024, 10, i+1)
         i +=1
 
+# Update
 
-# Workout
+# Delete
 
-## Create
+#endregion
+
+
+#region Workout
+
+# Create
 
 def test__workout_write_return_200(client):
     w1 = schemas.WorkoutCreate(
@@ -255,7 +261,7 @@ def test__workout_write_rating_not_provided(client):
     assert result.timestamp == w1.timestamp
     assert result.rating is None
 
-## Read
+# Read
 
 def test__workout_read_return_200(client):
     response = client.get("/workout")
@@ -270,7 +276,6 @@ def test__workout_read_by_range_start_end_return_200(client):
     assert response.status_code == 200
 
 def test__workout_read_all(client):
-    startW = 20
     ws = []
     for i in range(20):
         w1 = schemas.WorkoutCreate(
@@ -299,47 +304,104 @@ def test__workout_read_all(client):
         assert result.rating == w.rating
 
 # TODO: write actual response tests
-# def test__workout_read_by_id(client):
-#     workout_id = 2
-#     startW = 20
-#     for i in range(20):
-#         w1 = schemas.WeightCreate(weight = startW+i, timestamp=date(2024, 10, i+1))
-#         response = client.post("/weight", json=jsonable_encoder(w1))
-#         assert response.status_code == 200 # make sure weight_write worked
-#     response = client.get(f"/weight/{weight_id}")
-#     assert response.status_code == 200
-#     result = schemas.Weight.model_validate(response.json())
-#     assert result.weight == 21
-#     assert result.timestamp == date(2024, 10, 2)
-#     assert result.id == weight_id
 
-# def test__weight_read_by_date_single(client):
-#     startW = 20
-#     for i in range(20):
-#         w1 = schemas.WeightCreate(weight = startW+i, timestamp=date(2024, 10, i+1))
-#         response = client.post("/weight", json=jsonable_encoder(w1))
-#         assert response.status_code == 200 # make sure weight_write worked
-#     response = client.get(f"/weight/range/?start=2024-10-03")
-#     assert response.status_code == 200
-#     result = schemas.Weight.model_validate(response.json()[0])
-#     assert result.weight == 22
-#     assert result.timestamp == date(2024, 10, 3)
-#     assert result.id == 3
+# Update
 
-# def test__weight_read_by_date_multiple(client):
-#     startW = 20
-#     for i in range(20):
-#         w1 = schemas.WeightCreate(weight = startW+i, timestamp=date(2024, 10, i+1))
-#         response = client.post("/weight", json=jsonable_encoder(w1))
-#         assert response.status_code == 200 # make sure weight_write worked
-#     response = client.get(f"/weight/range/?start=2024-10-02&end=2024-10-07")
-#     assert response.status_code == 200
-#     results = response.json()
-#     assert len(results) == 6
-#     results = [schemas.Weight.model_validate(x) for x in results]
-#     i = 1
-#     for result in results:
-#         assert result.id == i+1
-#         assert result.weight == startW+i
-#         assert result.timestamp == date(2024, 10, i+1)
-#        i +=1
+# Delete
+
+#endregion
+
+
+#region Exercise
+
+# Create
+
+def test__exercise_write_return_200(client):
+    w1 = schemas.ExerciseCreate(
+        name="Pull-up",
+        short_name="pullup",
+        comment="Classical Pull-up exercise",
+        weight_calc_method="uw" #user weight
+        )
+    
+    response = client.post("/exercise", json=jsonable_encoder(w1))
+    assert response.status_code == 200
+
+def test__exercise_write(client):
+    w1 = schemas.ExerciseCreate(
+        name="Pull-up",
+        short_name="pullup",
+        comment="Classical Pull-up exercise",
+        weight_calc_method="uw" #user weight
+        )
+    
+    response = client.post("/exercise", json=jsonable_encoder(w1))
+    assert response.status_code == 200
+
+    result = schemas.Exercise.model_validate(response.json())
+    assert result.id == 1
+    assert result.name == w1.name
+    assert result.short_name == w1.short_name
+    assert result.weight_calc_method == w1.weight_calc_method
+
+# error name not unique
+# error short name not unique
+
+# Read
+
+def test__exercise_read(client):
+    w1 = schemas.ExerciseCreate(
+        name="Pull-up",
+        short_name="pullup",
+        comment="Classical Pull-up exercise",
+        weight_calc_method="uw" #user weight
+        )
+    
+    response = client.post("/exercise", json=jsonable_encoder(w1))
+    assert response.status_code == 200
+
+    response = client.get("/exercise/1")
+    assert response.status_code == 200
+
+    result = schemas.Exercise.model_validate(response.json())
+    assert result.id == 1
+    assert result.name == w1.name
+    assert result.short_name == w1.short_name
+    assert result.weight_calc_method == w1.weight_calc_method
+
+# read exercises
+# read by name
+# read by shortname
+
+# Update
+
+# Delete
+
+#endregion Exercise
+
+
+#region Set
+
+# Create
+
+# Read
+
+# Update
+
+# Delete
+
+#endregion Set
+
+
+#region EquipmentWeight
+
+# Create
+
+# Read
+
+# Update
+
+# Delete
+
+#endregion EquipmentWeight
+

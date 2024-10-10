@@ -39,10 +39,10 @@ class ExerciseBase(BaseModel):
     name: str
     weight_calc_method: str | None = None
     comment: str | None = None
-    short_name : str | None = None
+    short_name : str
 
 class ExerciseCreate(ExerciseBase):
-    pass
+    short_name : str | None = None
 
 class Exercise(ExerciseBase):
     id: int

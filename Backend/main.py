@@ -32,18 +32,19 @@ def get_db():
     finally:
         db.close()
 
-# WEIGHT
+#region Weight
 
-# WEIGHT - CREATE
+# Create
 
 @app.post("/weight/", response_model=schemas.Weight)
 def create_weight(weight: schemas.WeightCreate, db: Session = Depends(get_db)):
-    db_weight = crud.create_weight(db, weight=weight)
-    if(db_weight == "Date-already-exists"):
-        raise HTTPException(status_code=400, detail="This date's weight log already exists")
+    try:
+        db_weight = crud.create_weight(db, weight=weight)
+    except ValueError as err:
+        raise HTTPException(status_code=400, detail=str(err))
     return db_weight
 
-# WEIGHT - READ
+# Read
 
 @app.get("/weight/", response_model=list[schemas.Weight])
 def read_weights(skip: int = 0,limit: int = 100, db: Session = Depends(get_db)):
@@ -64,15 +65,23 @@ def read_weight_by_range(start: date, end: date|None = None, db: Session = Depen
         raise HTTPException(status_code=404, detail="Weight not found")
     return result
 
+# Update
 
-# WORKOUT - CREATE
+# Delete
+
+#endregion Weight
+
+
+#region Workout
+
+# Create
 
 @app.post("/workout/", response_model=schemas.Workout)
 def create_workout(workout: schemas.WorkoutCreate, db: Session = Depends(get_db)):
     db_workout = crud.create_workout(db, workout=workout)
     return db_workout
 
-# WORKOUT - READ
+# Read
 
 @app.get("/workout/", response_model=list[schemas.Workout])
 def read_workouts(skip: int = 0,limit: int = 100, db: Session = Depends(get_db)):
@@ -92,3 +101,75 @@ def read_workout_by_range(start: date, end: date|None = None, db: Session = Depe
     if result is None:
         raise HTTPException(status_code=404, detail="Workout not found")
     return result
+
+# Update
+
+# Delete
+
+#endregion Workout
+
+
+#region Exercise
+
+# Create
+
+@app.post("/exercise/", response_model=schemas.Exercise)
+def create_exercise(exercise: schemas.ExerciseCreate, db: Session = Depends(get_db)):
+    try:
+        db_exercise = crud.create_exercise(db, exercise=exercise)
+    except ValueError as err:
+        raise HTTPException(status_code=400, detail=str(err))
+    return db_exercise
+
+# Read
+
+@app.get("/exercise/", response_model=list[schemas.Exercise])
+def read_weights(skip: int = 0,limit: int = 100, db: Session = Depends(get_db)):
+    exercises = crud.get_exercises(db, skip=skip, limit=limit)
+    return exercises
+
+@app.get("/exercise/{exercise_id}", response_model=schemas.Exercise)
+def read_exercise(exercise_id: int, db: Session = Depends(get_db)):
+    db_exercise = crud.get_exercise(db, exercise_id=exercise_id)
+    if (db_exercise is None):
+        raise HTTPException(status_code=404, detail="Exercise not found")
+    return db_exercise
+
+@app.get("/exercise/range/", response_model=list[schemas.Exercise])
+def read_exercise_by_range(start: date, end: date|None = None, db: Session = Depends(get_db)):
+    result = crud.get_exercise_by_daterange(db, start, end)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Exercise not found")
+    return result
+
+# Update
+
+# Delete
+
+#endregion Exercise
+
+
+#region Set
+
+# Create
+
+# Read
+
+# Update
+
+# Delete
+
+#endregion Set
+
+
+#region EquipmentWeight
+
+# Create
+
+# Read
+
+# Update
+
+# Delete
+
+#endregion EquipmentWeight
